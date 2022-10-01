@@ -1,0 +1,24 @@
+{
+  "name": "auth-proxy-cronjob",
+  "version": "1.0.0",
+  "description": "cronjob to run auth porxy script on all tenant",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ANISH SHETTY K (anishetty@conga.com)",
+  "license": "ISC",
+  "dependencies": {
+    "@kubernetes/client-node": "^0.17.1",
+    "@microsoft/microsoft-graph-client": "^3.0.2",
+    "aws-sdk": "^2.1223.0",
+    "chalk": "^5.0.1",
+    "dotenv": "^16.0.2",
+    "js-yaml": "^4.1.0",
+    "ms-teams-webhook": "^1.0.4",
+    "nanospinner": "^1.1.0",
+    "uuid": "^9.0.0"
+  }
+}
