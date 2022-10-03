@@ -3,22 +3,20 @@ import chalk from "chalk";
 import fs from "fs";
 import jsYaml from "js-yaml";
 
-import "dotenv/config";
-
 import { loopContext } from "../index.js";
+import secrets from "../../secrets.js";
 
 const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
+  accessKeyId: secrets.AWS_ACCESS_KEY_ID,
+  secretAccessKey: secrets.AWS_SECRET_ACCESS_KEY,
+  region: secrets.AWS_REGION,
 });
-
 const params = {
-  Bucket: process.env.AWS_BUCKET_NAME,
-  Key: process.env.AWS_FILE_KEY,
+  Bucket: secrets.AWS_BUCKET_NAME,
+  Key: secrets.AWS_FILE_KEY,
 };
 
-const configJsonFileName = `${process.env.CONFIG_FILE_NAME.split(".")[0]}.json`;
+const configJsonFileName = `${secrets.CONFIG_FILE_NAME.split(".")[0]}.json`;
 
 const getConfig = async (scriptStartTime) => {
   try {
@@ -29,7 +27,7 @@ const getConfig = async (scriptStartTime) => {
         fs.writeFileSync("config.yaml", data.Body);
         console.log(chalk.green("Imported config.yaml from S3"));
         fs.readdirSync("./").forEach(async (file) => {
-          if (file === process.env.CONFIG_FILE_NAME) {
+          if (file === secrets.CONFIG_FILE_NAME) {
             const appClusterNames = await getJsonFromYaml();
             if (appClusterNames) {
               await loopContext(scriptStartTime, appClusterNames);
@@ -46,7 +44,7 @@ const getConfig = async (scriptStartTime) => {
 const getJsonFromYaml = async () => {
   try {
     const jsonConfig = await jsYaml.load(
-      fs.readFileSync(process.env.CONFIG_FILE_NAME, "utf-8")
+      fs.readFileSync(secrets.CONFIG_FILE_NAME, "utf-8")
     );
     const yamlJson = JSON.stringify(jsonConfig, null, 2);
     fs.writeFileSync(configJsonFileName, yamlJson);
@@ -56,7 +54,7 @@ const getJsonFromYaml = async () => {
       return res;
     } else {
       throw new Error(
-        `No app clusters found from ${process.env.CONFIG_FILE_NAME} file`
+        `No app clusters found from ${secrets.CONFIG_FILE_NAME} file`
       );
     }
   } catch (err) {
@@ -72,7 +70,7 @@ const filterAppClusters = async () => {
       .filter((cluster) => cluster.name.split("-").join("").includes("app"))
       .map((cluster) => cluster.name)
       .filter((name) =>
-        process.env.CLUSTERS_NEEDED.split(" ").some((clusterName) =>
+        secrets.CLUSTERS_NEEDED.split(" ").some((clusterName) =>
           name.includes(clusterName)
         )
       );

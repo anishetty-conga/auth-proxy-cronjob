@@ -1,8 +1,8 @@
 import { IncomingWebhook } from "ms-teams-webhook";
 
-import "dotenv/config";
+import secrets from "../../secrets.js";
 
-const webhook = new IncomingWebhook(process.env.TEAMS_WEBHOOK);
+const webhook = new IncomingWebhook(secrets.TEAMS_WEBHOOK);
 
 const sendTeamsNotification = async (
   startTime = "Not avilable",
@@ -37,7 +37,7 @@ const sendTeamsNotification = async (
           facts: [
             { name: "Start time", value: startTime },
             { name: "End time", value: new Date().toLocaleTimeString() },
-            { name: "Checked on", value: process.env.CLUSTERS_NEEDED },
+            { name: "Checked on", value: secrets.CLUSTERS_NEEDED },
           ],
         },
 

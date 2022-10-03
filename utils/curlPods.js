@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import util from "node:util";
 import childProcess from "node:child_process";
-import "dotenv/config";
+import secrets from "../secrets.js";
 
 const exec = util.promisify(childProcess.exec);
 
@@ -57,7 +57,7 @@ const curlPod = async (
 ) => {
   try {
     const res = await exec(
-      `kubectl exec -n ${namespace} ${podName} -c ${nodeName} --kubeconfig=config.yaml -- curl -v "http://localhost:8080/" --max-time ${process.env.CURL_TIMEOUT}`
+      `kubectl exec -n ${namespace} ${podName} -c ${nodeName} --kubeconfig=config.yaml -- curl -v "http://localhost:8080/" --max-time ${secrets.CURL_TIMEOUT}`
     );
     const { err, stdout, stderr } = res;
 

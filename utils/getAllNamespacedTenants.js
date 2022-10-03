@@ -2,7 +2,7 @@ import util from "node:util";
 import childProcess from "node:child_process";
 import chalk from "chalk";
 
-import "dotenv/config";
+import secrets from "../secrets.js";
 
 const exec = util.promisify(childProcess.exec);
 
@@ -29,22 +29,20 @@ const filterNameSpaceAndTenants = async (rawNamespaces) => {
     const namespaces = rawNamespaces.split(" ");
 
     const filteredNamespaces = namespaces.filter((namespace) =>
-      process.env.NAMESPACE_NEEDED_PREFIX.split(" ").some((namespaceName) =>
+      secrets.NAMESPACE_NEEDED_PREFIX.split(" ").some((namespaceName) =>
         namespace.includes(namespaceName)
       )
     );
 
     const allTenanats = new Set();
 
-    process.env.NAMESPACE_NEEDED_PREFIX.split(" ").forEach(
-      (namespacePrefix) => {
-        filteredNamespaces.forEach((namespace) => {
-          if (namespace.includes(namespacePrefix)) {
-            allTenanats.add(namespace.split(`${namespacePrefix}-`)[1]);
-          }
-        });
-      }
-    );
+    secrets.NAMESPACE_NEEDED_PREFIX.split(" ").forEach((namespacePrefix) => {
+      filteredNamespaces.forEach((namespace) => {
+        if (namespace.includes(namespacePrefix)) {
+          allTenanats.add(namespace.split(`${namespacePrefix}-`)[1]);
+        }
+      });
+    });
 
     return Array.from(allTenanats);
   } catch (err) {
