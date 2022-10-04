@@ -22,8 +22,8 @@ const sendTeamsNotification = async (
     await webhook.send({
       "@type": "MessageCard",
       "@context": "http://schema.org/extensions",
-      themeColor: "FF0000",
-      summary: "Pods failing Auth proxy check​",
+      themeColor: errorPods.length > 0 ? "FF0000" : "50c878",
+      summary: "Auth proxy check​",
       title: `${
         errorPods.length === 0
           ? "All pods are working as expected"

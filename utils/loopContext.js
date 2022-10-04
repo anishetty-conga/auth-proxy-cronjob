@@ -22,6 +22,8 @@ const loopContext = async (scriptStartTime, appCluster) => {
   }
   if (globalPodFails.length > 0) {
     await sendTeamsNotification(scriptStartTime, globalPodFails);
+  } else {
+    await sendTeamsNotification(scriptStartTime, globalPodFails);
   }
 };
 
