@@ -16,57 +16,27 @@ const params = {
   Key: secrets.AWS_FILE_KEY,
 };
 
-const configJsonFileName = `${secrets.CONFIG_FILE_NAME.split(".")[0]}.json`;
-
 const getConfig = async (scriptStartTime) => {
   try {
-    s3.getObject(params, (err, data) => {
+    s3.getObject(params, async (err, data) => {
       if (err) {
         throw new Error(err);
       } else {
-        fs.writeFileSync("config.yaml", data.Body);
-        console.log(chalk.green("Imported config.yaml from S3"));
-        fs.readdirSync("./").forEach(async (file) => {
-          if (file === secrets.CONFIG_FILE_NAME) {
-            const appClusterNames = await getJsonFromYaml();
-            if (appClusterNames) {
-              await loopContext(scriptStartTime, appClusterNames);
-            }
-          }
-        });
+        fs.writeFileSync(
+          `${process.argv[2]}-${secrets.CONFIG_FILE_NAME}`,
+          data.Body
+        );
+        console.log(
+          chalk.green(
+            `Imported ${process.argv[2]}-${secrets.CONFIG_FILE_NAME} from S3`
+          )
+        );
+
+        if (secrets.CLUSTERS[process.argv[2]]?.length > 0) {
+          await loopContext(scriptStartTime, secrets.CLUSTERS[process.argv[2]]);
+        }
       }
     });
-  } catch (err) {
-    console.log(chalk.bold.red(err));
-  }
-};
-
-const getJsonFromYaml = async () => {
-  try {
-    const jsonConfig = await jsYaml.load(
-      fs.readFileSync(secrets.CONFIG_FILE_NAME, "utf-8")
-    );
-    const yamlJson = JSON.stringify(jsonConfig, null, 2);
-    fs.writeFileSync(configJsonFileName, yamlJson);
-    console.log(chalk.green("Created config.json from config.yaml"));
-    const res = await filterAppClusters();
-    if (res.length > 0) {
-      return res;
-    } else {
-      throw new Error(
-        `No app clusters found from ${secrets.CONFIG_FILE_NAME} file`
-      );
-    }
-  } catch (err) {
-    console.log(chalk.bold.red(err));
-  }
-};
-
-const filterAppClusters = async () => {
-  try {
-    const clusters = secrets.CLUSTERS[process.argv[2]];
-    console.log(clusters);
-    return clusters;
   } catch (err) {
     console.log(chalk.bold.red(err));
   }

@@ -1,5 +1,7 @@
 .env
 /node_modules
-config.yaml
+prod-config.yaml
+preprod-config.yaml
+dev-config.yaml
 config.json
 secrets.js

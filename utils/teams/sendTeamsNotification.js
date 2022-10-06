@@ -50,7 +50,10 @@ const sendTeamsNotification = async (
           facts: [
             { name: "Start time", value: startTime },
             { name: "End time", value: new Date().toLocaleTimeString() },
-            { name: "Checked on", value: secrets.CLUSTERS[process.argv[2]] },
+            {
+              name: "Checked on",
+              value: secrets.CLUSTERS[process.argv[2]].join(" "),
+            },
           ],
         },
 
@@ -60,6 +63,22 @@ const sendTeamsNotification = async (
               ? "No pods are failing auth proxy check @authProxyGroup"
               : "Failing pods @authProxyGroup​",
           facts: [...errorPodsDisplay],
+        },
+      ],
+      mentions: [
+        {
+          id: 0,
+          mentionText: "authProxyGroup",
+          mentioned: {
+            application: null,
+            device: null,
+            user: null,
+            conversation: null,
+            tag: {
+              id: "M2E0MWFlNTMtZmIzNS00NDMxLWJlN2ItYTBiM2UxYWVlM2MwIyM4OTNhYjlhZC0zYzZkLTQwNzctOWE5Mi0yM2M5YmEwZjkwYmIjI3RtS0NiQVZUOQ==",
+              displayName: "authProxyGroup",
+            },
+          },
         },
       ],
     });

@@ -9,7 +9,7 @@ const exec = util.promisify(childProcess.exec);
 const getAllNamespacedTenants = async () => {
   try {
     const { err, stdout, stderr } = await exec(
-      `kubectl get ns --kubeconfig=config.yaml -o=jsonpath='{.items[*].metadata.name}'`
+      `kubectl get ns --kubeconfig=${process.argv[2]}-${secrets.CONFIG_FILE_NAME} -o=jsonpath='{.items[*].metadata.name}'`
     );
     if (err) {
       throw new Error(err);

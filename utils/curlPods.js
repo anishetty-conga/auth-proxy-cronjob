@@ -57,7 +57,7 @@ const curlPod = async (
 ) => {
   try {
     const res = await exec(
-      `kubectl exec -n ${namespace} ${podName} -c ${nodeName} --kubeconfig=config.yaml -- curl -v "http://localhost:8080/" --max-time ${secrets.CURL_TIMEOUT}`
+      `kubectl exec -n ${namespace} ${podName} -c ${nodeName} --kubeconfig=${process.argv[2]}-${secrets.CONFIG_FILE_NAME} -- curl -v "http://localhost:8080/" --max-time ${secrets.CURL_TIMEOUT}`
     );
     const { err, stdout, stderr } = res;
 
@@ -133,7 +133,7 @@ const curlPod = async (
 const addCurl = async (kc, namespace, podName, nodeName) => {
   try {
     const { stdout, stderr } = await exec(
-      `kubectl exec -n ${namespace} ${podName} -c ${nodeName} --kubeconfig=config.yaml -- apk add curl`
+      `kubectl exec -n ${namespace} ${podName} -c ${nodeName} --kubeconfig=${process.argv[2]}-${secrets.CONFIG_FILE_NAME} -- apk add curl`
     );
   } catch (err) {}
 };
