@@ -64,17 +64,9 @@ const getJsonFromYaml = async () => {
 
 const filterAppClusters = async () => {
   try {
-    const jsonConfig = fs.readFileSync(configJsonFileName, "utf-8");
-    const config = await JSON.parse(jsonConfig);
-    const appCluster = config.clusters
-      .filter((cluster) => cluster.name.split("-").join("").includes("app"))
-      .map((cluster) => cluster.name)
-      .filter((name) =>
-        secrets.CLUSTERS_NEEDED.split(" ").some((clusterName) =>
-          name.includes(clusterName)
-        )
-      );
-    return appCluster;
+    const clusters = secrets.CLUSTERS[process.argv[2]];
+    console.log(clusters);
+    return clusters;
   } catch (err) {
     console.log(chalk.bold.red(err));
   }

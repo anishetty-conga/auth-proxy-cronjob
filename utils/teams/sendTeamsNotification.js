@@ -2,7 +2,20 @@ import { IncomingWebhook } from "ms-teams-webhook";
 
 import secrets from "../../secrets.js";
 
-const webhook = new IncomingWebhook(secrets.TEAMS_WEBHOOK);
+let teamsWebhookUrl;
+if (!process?.argv[2]) {
+  teamsWebhookUrl = secrets.TEAMS_WEBHOOK;
+} else if (process?.argv[2] === "dev") {
+  teamsWebhookUrl = secrets.TEAMS_WEBHOOK_DEV;
+} else if (process?.argv[2] === "preprod") {
+  teamsWebhookUrl = secrets.TEAMS_WEBHOOK_PREPROD;
+} else if (process?.argv[2] === "prod") {
+  teamsWebhookUrl = secrets.TEAMS_WEBHOOK_PROD;
+} else {
+  teamsWebhookUrl = secrets.TEAMS_WEBHOOK;
+}
+
+const webhook = new IncomingWebhook(teamsWebhookUrl);
 
 const sendTeamsNotification = async (
   startTime = "Not avilable",
@@ -37,15 +50,15 @@ const sendTeamsNotification = async (
           facts: [
             { name: "Start time", value: startTime },
             { name: "End time", value: new Date().toLocaleTimeString() },
-            { name: "Checked on", value: secrets.CLUSTERS_NEEDED },
+            { name: "Checked on", value: secrets.CLUSTERS[process.argv[2]] },
           ],
         },
 
         {
           activityTitle:
             errorPodsDisplay.length === 0
-              ? "No pods are failing auth proxy check"
-              : "Failing pods​",
+              ? "No pods are failing auth proxy check @authProxyGroup"
+              : "Failing pods @authProxyGroup​",
           facts: [...errorPodsDisplay],
         },
       ],

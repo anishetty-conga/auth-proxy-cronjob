@@ -9,6 +9,7 @@ let globalPodFails = [];
 
 const loopContext = async (scriptStartTime, appCluster) => {
   //   await switchContext("eu-app-eks-prod-0001");
+
   for (let name of appCluster) {
     const switchContextRes = await switchContext(name);
     if (switchContextRes) {
