@@ -1,0 +1,1 @@
+node authProxyPodRestart.js auth_proxy

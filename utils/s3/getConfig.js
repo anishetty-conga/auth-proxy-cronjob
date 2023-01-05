@@ -1,7 +1,6 @@
 import AWS from "aws-sdk";
 import chalk from "chalk";
 import fs from "fs";
-import jsYaml from "js-yaml";
 
 import { loopContext } from "../index.js";
 import secrets from "../../secrets.js";

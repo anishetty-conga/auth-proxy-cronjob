@@ -1,6 +1,0 @@
-rochediag-dev-v,   cart web 0 in terminating state but newly created cart web 0 is responding
-sed36-rochediag-v, cart web 0 and 2
-eni-learning-v,  cart web not responding
-
-
-curl -v "http://localhost:8080/"

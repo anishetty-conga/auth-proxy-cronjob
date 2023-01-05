@@ -60,27 +60,29 @@ const sendTeamsNotification = async (
         {
           activityTitle:
             errorPodsDisplay.length === 0
-              ? "No pods are failing auth proxy check @authProxyGroup"
-              : "Failing pods @authProxyGroup​",
+              ? "No pods are failing auth proxy check <at>authProxyGroup</at>"
+              : "Failing pods authProxyGroup​",
           facts: [...errorPodsDisplay],
         },
       ],
-      mentions: [
-        {
-          id: 0,
-          mentionText: "authProxyGroup",
-          mentioned: {
-            application: null,
-            device: null,
-            user: null,
-            conversation: null,
-            tag: {
-              id: "M2E0MWFlNTMtZmIzNS00NDMxLWJlN2ItYTBiM2UxYWVlM2MwIyM4OTNhYjlhZC0zYzZkLTQwNzctOWE5Mi0yM2M5YmEwZjkwYmIjI3RtS0NiQVZUOQ==",
-              displayName: "authProxyGroup",
-            },
-          },
-        },
-      ],
+
+      // mentions: [
+      //   {
+      //     id: 0,
+      //     mentionText: "authProxyGroup",
+      //     mentioned: {
+      //       application: null,
+      //       device: null,
+      //       user: null,
+      //       conversation: null,
+      //       tag: {
+      //         id: "M2E0MWFlNTMtZmIzNS00NDMxLWJlN2ItYTBiM2UxYWVlM2MwIyM4OTNhYjlhZC0zYzZkLTQwNzctOWE5Mi0yM2M5YmEwZjkwYmIjI3RtS0NiQVZUOQ==",
+      //         displayName: "authProxyGroup",
+      //       },
+      //     },
+      //   },
+      // ],
+      //mentions
     });
     console.log("Sent teams message");
   } catch (err) {
